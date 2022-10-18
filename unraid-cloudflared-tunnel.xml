@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Unraid-Cloudflared-Tunnel</Name>
+  <Repository/>
+  <Registry/>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://forums.unraid.net/topic/129752-figros-unraid-cloudflared-tunnel-support-thread/</Support>
+  <Project/>
+  <Overview>Cloudflared Docs: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/&#xD;
+&#xD;
+https://hub.docker.com/r/cloudflare/cloudflared&#xD;
+&#xD;
+https://github.com/cloudflare/cloudflared&#xD;
+&#xD;
+ &#xD;
+&#xD;
+Github: https://github.com/AriaGomes/Unraid-Cloudflared-Tunnel&#xD;
+DockerHub: &amp;lt;TBD&amp;gt;&#xD;
+&#xD;
+Discord: Figro#4064</Overview>
+  <Category>Cloud: Tools: Network:Proxy Status:Beta</Category>
+  <WebUI/>
+  <TemplateURL/>
+  <Icon>https://icons-for-free.com/iconfiles/png/512/super+tiny+icons+cloudflare-1324450714381209833.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1666059488</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="Cloudflared Tunnel Token" Target="token" Default="eyJaCpXW0EFVOtmRH50aWJjT0FlaNh3aUxEbadkWwATaZBTUU5EdVpXTshmaapXRU5kI6IyciwiI5ATO3EGMmRWO5UDMtQTMilTLkVjZ00yNxADZtQWZjljY1ETOiojI0JCLiMDNiVTM5ImZyMWM5E2YkNDZ1cjZzUDMxkTO3UGNwAjNiojIhyJ9" Mode="" Description="Found in cloudflare zero trust dashboard. Looks similar to default value" Type="Variable" Display="always" Required="true" Mask="false"/>
+</Container>

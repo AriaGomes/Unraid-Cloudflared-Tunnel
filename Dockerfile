@@ -1,9 +1,9 @@
-FROM debian:latest
+FROM alpine:latest
 WORKDIR /home
-RUN apt-get update && apt-get install -y curl
-RUN curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-RUN dpkg -i cloudflared.deb
-
+RUN apk add --no-cache curl
+RUN curl -L --output cloudflared https://github.com/cloudflare/cloudflared/releases/download/2022.10.2/cloudflared-linux-amd64
+RUN apk add libc6-compat
 COPY cloudflared.sh ./
 RUN chmod +x ./cloudflared.sh
+RUN chmod +x ./cloudflared
 ENTRYPOINT ./cloudflared.sh

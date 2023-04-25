@@ -27,4 +27,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/unraid-cloudflared-tunnel:test
+          tags: ${{ secrets.DOCKER_USERNAME }}/unraid-cloudflared-tunnel

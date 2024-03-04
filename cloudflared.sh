@@ -2,7 +2,6 @@
 
 # Function to handle cleanup
 cleanup() {
-    echo "Stopping cloudflared..."
     # Add any cleanup tasks here
     kill -9 $pid  # Forcefully terminate cloudflared
     exit 0
@@ -23,7 +22,6 @@ pid=$!
 
 # Function to wait for cloudflared process to terminate
 wait_cloudflared() {
-    echo "Waiting for cloudflared process to terminate..."
     wait $pid
 }
 

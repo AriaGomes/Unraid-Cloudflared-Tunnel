@@ -3,7 +3,7 @@
 A simple way to get a Cloudflared tunnel on Unraid.
 
 
-Only Supportting amd64. If you need other architechure start an issue or feel free to build from source :)
+Only supportting amd64. If you need other architechure start an issue or feel free to build from source :)
 
 [![Video](https://img.youtube.com/vi/h5fAcE70xbQ/0.jpg)](https://www.youtube.com/watch?v=h5fAcE70xbQ)
 

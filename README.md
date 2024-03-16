@@ -40,5 +40,5 @@ For more information on these variables visit the Cloudflared docs [here](https:
 
 `TUNNEL_RETRIES` - Specifies the maximum number of retries for connection/protocol errors. Retries use exponential backoff (retrying at 1, 2, 4, 8, 16 seconds by default), so it is not recommended that you increase this value significantly. [More Info](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/tunnel-run-parameters/#retries)
 
-`TUNNEL_TAG` - Specifies custom tags used to identify this tunnel. Multiple tags may be specified by adding additional --tag <KEY=VAL> flags to the command. If entering multiple tags into a configuration file, delimit with commas: tag: {KEY1=VALUE1, KEY2=VALUE2}. [More Info](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/tunnel-run-parameters/#tag)
+`TUNNEL_TAG` - Specifies custom tags used to identify this tunnel. Multiple tags may be specified by adding additional `--tag <KEY=VAL>` flags to the command. If entering multiple tags into a configuration file, delimit with commas: tag: {KEY1=VALUE1, KEY2=VALUE2}. [More Info](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/tunnel-run-parameters/#tag)
 

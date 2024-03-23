@@ -2,7 +2,7 @@ name: Build-Publish
 on:
   push:
     branches:
-      - 'main'
+      - 'test'
   schedule:
     - cron: '0 0 * * *'
   

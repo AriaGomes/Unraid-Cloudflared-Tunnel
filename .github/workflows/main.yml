@@ -36,12 +36,12 @@ jobs:
         if: steps.check_release.outputs.new_release == 'true'
       -
         name: List files
-        run: ls -R
+        run: ls -alR
       -
         name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: . # the directory containing the Dockerfile
+          context: ~/ # the directory containing the Dockerfile
           file: ./Dockerfile # the path to the Dockerfile from the context directory
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/unraid-cloudflared-tunnel

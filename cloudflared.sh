@@ -20,7 +20,11 @@ if [ -z "$TUNNEL_TOKEN" ]; then
         TUNNEL_TOKEN="$token"
     fi
 fi
-
+# Download and install cloudflared
+url=$(curl -s https://api.github.com/repos/cloudflare/cloudflared/releases/latest | jq -r '.assets[] | select(.browser_download_url | endswith("cloudflared-linux-amd64")) | .browser_download_url') && \
+curl -L --output "cloudflared" $url && \
+chmod +x ./cloudflared && \
+mv ./cloudflared /usr/local/bin/
 # Start cloudflared with TUNNEL_TOKEN or fallback to token
 cloudflared tunnel run --token $TUNNEL_TOKEN &
 pid=$!

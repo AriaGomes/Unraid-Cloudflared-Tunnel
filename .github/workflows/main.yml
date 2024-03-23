@@ -3,40 +3,23 @@ on:
   push:
     branches:
       - 'test'
-  schedule:
-    - cron: '0 0 * * *'
   
 jobs:
-  check_and_build:
+  build:
     runs-on: ubuntu-latest
     steps:
       -
-        name: Check for new release
-        id: check_release
-        run: |
-          LATEST_RELEASE=$(curl --silent "https://api.github.com/repos/cloudflare/cloudflared/releases/latest" | jq -r .tag_name)
-          echo "Latest release is $LATEST_RELEASE"
-          if [[ "$LATEST_RELEASE" != "${{ secrets.LATEST_RELEASE }}" ]]; then
-            echo "::set-output name=new_release::true"
-            echo "New release detected: $LATEST_RELEASE"
-          else
-            echo "::set-output name=new_release::false"
-            echo "No new release detected"
-          fi
+        name: Checkout 
+        uses: actions/checkout@v2
       -
         name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-        if: steps.check_release.outputs.new_release == 'true'
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-        if: steps.check_release.outputs.new_release == 'true'
-      -
-        name: Checkout code
-        uses: actions/checkout@v2
       -
         name: Build and push
         uses: docker/build-push-action@v2
@@ -45,25 +28,3 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/unraid-cloudflared-tunnel
-        if: steps.check_release.outputs.new_release == 'true'
-    outputs:
-      new_release: ${{ steps.check_release.outputs.new_release }}
-
-  update_secret:
-    runs-on: ubuntu-latest
-    needs: check_and_build
-    if: needs.check_and_build.outputs.new_release == 'true'
-    steps:
-      -
-        name: Update LATEST_RELEASE secret
-        run: |
-          LATEST_RELEASE=$(curl --silent "https://api.github.com/repos/cloudflare/cloudflared/releases/latest" | jq -r .tag_name)
-          ENCRYPTED_VALUE=$(echo -n $LATEST_RELEASE | openssl rsautl -encrypt -pubin -inkey <(curl -s https://api.github.com/repos/${{ github.repository }}/actions/secrets/public-key | jq -r .key) | base64 | tr -d '\n')
-          KEY_ID=$(curl -s https://api.github.com/repos/${{ github.repository }}/actions/secrets/public-key | jq -r .key_id)
-          curl -L \
-            -X PUT \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.PAT }}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/${{ github.repository }}/actions/secrets/LATEST_RELEASE \
-            -d "{\"encrypted_value\":\"$ENCRYPTED_VALUE\",\"key_id\":\"$KEY_ID\"}"

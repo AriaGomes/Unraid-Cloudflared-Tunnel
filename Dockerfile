@@ -10,5 +10,8 @@ RUN apk add --no-cache curl jq
 COPY cloudflared.sh ./cloudflared.sh
 RUN chmod +x ./cloudflared.sh
 
+# Expose Metrics
+EXPOSE 46495
+
 # Define entrypoint
 ENTRYPOINT ["./cloudflared.sh"]

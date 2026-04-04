@@ -5,6 +5,8 @@ A simple way to get a Cloudflared tunnel on Unraid.
 
 Only supportting amd64. If you need other architechure start an issue or feel free to build from source :)
 
+The container now downloads `cloudflared` only when the local binary is missing or older than the latest upstream release. If you want this optimization to survive container recreation, persist `/usr/local/bin/cloudflared` or the containing directory with a volume.
+
 [![Video](https://img.youtube.com/vi/h5fAcE70xbQ/0.jpg)](https://www.youtube.com/watch?v=h5fAcE70xbQ)
 
 *Thanks to SpaceInvader One and the Unraid Team*
@@ -41,4 +43,3 @@ For more information on these variables visit the Cloudflared docs [here](https:
 `TUNNEL_RETRIES` - Specifies the maximum number of retries for connection/protocol errors. Retries use exponential backoff (retrying at 1, 2, 4, 8, 16 seconds by default), so it is not recommended that you increase this value significantly. [More Info](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/tunnel-run-parameters/#retries)
 
 `TUNNEL_TAG` - Specifies custom tags used to identify this tunnel. Multiple tags may be specified by adding additional `--tag <KEY=VAL>` flags to the command. If entering multiple tags into a configuration file, delimit with commas: tag: {KEY1=VALUE1, KEY2=VALUE2}. [More Info](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/tunnel-run-parameters/#tag)
-

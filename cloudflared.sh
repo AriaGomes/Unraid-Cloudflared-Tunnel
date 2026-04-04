@@ -3,6 +3,11 @@
 # cloudflared binary install path
 CLOUDFLARED_BIN="/usr/local/bin/cloudflared"
 
+# Function to write script logs to console in correct order with cloudflared logs
+log() {
+    printf '%s\n' "$*" >&2
+}
+
 # Fetch the latest cloudflared version and download URL
 fetch_latest_release() {
     latest_release_json=$(curl -fsSL https://api.github.com/repos/cloudflare/cloudflared/releases/latest) || return 1
@@ -30,30 +35,20 @@ install_cloudflared() {
     mv ./cloudflared "$CLOUDFLARED_BIN"
 }
 
-# Function to handle cleanup
-cleanup() {
-    # Add any cleanup tasks here
-    kill -9 $pid  # Forcefully terminate cloudflared
-    exit 0
-}
-
-# Trap signals and call cleanup function
-trap cleanup SIGINT SIGTERM
-
 # Check if TUNNEL_TOKEN is set, if not, use token
 if [ -z "$TUNNEL_TOKEN" ]; then
     if [ -z "$token" ]; then
-        echo "Error: 'TUNNEL_TOKEN' environment variable is not set."
+        log "Error: 'TUNNEL_TOKEN' environment variable is not set."
         exit 1
     else
-        echo "Warning: 'TUNNEL_TOKEN' should be used instead of 'token'."
+        log "Warning: 'TUNNEL_TOKEN' should be used instead of 'token'."
         TUNNEL_TOKEN="$token"
     fi
 fi
 
 # Fetch the latest remote release metadata and keep the existing failure behavior
 if ! fetch_latest_release; then
-    echo "Error: Failed to fetch the latest cloudflared release metadata."
+    log "Error: Failed to fetch the latest cloudflared release metadata."
     exit 1
 fi
 
@@ -61,27 +56,16 @@ LOCAL_VERSION=$(get_local_version)
 
 # Install when the binary is missing; update only when the local version is behind
 if [ ! -x "$CLOUDFLARED_BIN" ]; then
-    echo "cloudflared binary not found, downloading version: $LATEST_VERSION"
+    log "cloudflared binary not found, downloading version: $LATEST_VERSION"
     install_cloudflared || exit 1
 elif [ "$LOCAL_VERSION" != "$LATEST_VERSION" ]; then
-    echo "Updating cloudflared from version $LOCAL_VERSION to $LATEST_VERSION"
+    log "Updating cloudflared from version $LOCAL_VERSION to $LATEST_VERSION"
     install_cloudflared || exit 1
 else
     # Reuse the local binary when it is already up to date
-    echo "Using existing cloudflared binary: $CLOUDFLARED_BIN (version: $LOCAL_VERSION)"
+    log "Using existing cloudflared binary: $CLOUDFLARED_BIN (version: $LOCAL_VERSION)"
 fi
 
-# Start cloudflared with TUNNEL_TOKEN or fallback to token
-"$CLOUDFLARED_BIN" tunnel run --token "$TUNNEL_TOKEN" &
-pid=$!
-
-# Function to wait for cloudflared process to terminate
-wait_cloudflared() {
-    wait $pid
-}
-
-# Trap EXIT signal to wait for cloudflared process to terminate
-trap wait_cloudflared EXIT
-
-# Wait for the script to be terminated
-wait
+# Start cloudflared
+log "Starting cloudflared tunnel"
+exec "$CLOUDFLARED_BIN" tunnel run --token "$TUNNEL_TOKEN"

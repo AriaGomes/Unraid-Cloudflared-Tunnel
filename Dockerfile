@@ -1,4 +1,4 @@
-FROM alpine:3.14
+FROM alpine:latest
 
 # Set working directory
 WORKDIR /usr/src/app

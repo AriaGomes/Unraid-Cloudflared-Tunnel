@@ -5,7 +5,7 @@ A simple way to get a Cloudflared tunnel on Unraid.
 
 Only supportting amd64. If you need other architechure start an issue or feel free to build from source :)
 
-The container now downloads `cloudflared` only when the local binary is missing or older than the latest upstream release. If you want this optimization to survive container recreation, persist `/appdata` or the containing directory with a volume.
+The container now downloads `cloudflared` only when the local binary is missing or older than the latest upstream release. If you want this optimization to survive container recreation, persist `/appdata/cloudflared` or the containing directory with a volume.
 
 [![Video](https://img.youtube.com/vi/h5fAcE70xbQ/0.jpg)](https://www.youtube.com/watch?v=h5fAcE70xbQ)
 

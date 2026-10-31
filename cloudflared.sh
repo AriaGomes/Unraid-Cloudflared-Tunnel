@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # cloudflared binary install path
-CLOUDFLARED_BIN="/usr/local/bin/cloudflared"
+APPDATA_DIR="/appdata"
+CLOUDFLARED_BIN="$APPDATA_DIR/cloudflared"
 
 # Function to write script logs to console in correct order with cloudflared logs
 log() {
@@ -59,11 +60,14 @@ if [ -z "$TUNNEL_TOKEN" ]; then
     fi
 fi
 
+# Make sure the install directory exists
+mkdir -p "$APPDATA_DIR" || log "Warning: Could not create $APPDATA_DIR."
+
 LOCAL_VERSION=$(get_local_version)
 CURRENT_VERSION="${LOCAL_VERSION:-unknown}"
 
 if fetch_latest_release; then
-    # Install when the binary is missing, update only when the local version is behind
+    # Install when the binary is missing; update only when the local version is behind
     if [ ! -x "$CLOUDFLARED_BIN" ]; then
         log "cloudflared binary not found, downloading version: $LATEST_VERSION"
         if ! install_cloudflared; then
@@ -74,7 +78,7 @@ if fetch_latest_release; then
         log "Updating cloudflared from version $CURRENT_VERSION to $LATEST_VERSION"
         if ! install_cloudflared; then
             log "Warning: Failed to download cloudflared version $LATEST_VERSION."
-            log "Warning: Continuing with the existing binary, which MAY BE OUT OF DATE: $CLOUDFLARED_BIN (version: $CURRENT_VERSION)"
+            log "Warning: Continuing with the existing binary, which may be out of date: $CLOUDFLARED_BIN (version: $CURRENT_VERSION)"
         fi
     else
         #use the local binary when it is already up to date
@@ -82,7 +86,7 @@ if fetch_latest_release; then
     fi
 elif [ -x "$CLOUDFLARED_BIN" ]; then
     # Could not reach/parse the release metadata, but a binary is already installed
-    log "Warning: Failed to fetch the latest cloudflared version; THE CURRENT VERSION MAY BE OUT OF DATE!!!"
+    log "Warning: Failed to fetch the latest cloudflared version; the current version may be out of date."
     log "Warning: Continuing with the existing binary: $CLOUDFLARED_BIN (version: $CURRENT_VERSION)"
 else
     log "Error: Failed to fetch the latest cloudflared release metadata and no existing binary was found."
